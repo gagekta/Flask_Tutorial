@@ -72,5 +72,63 @@ def delete_boat():
         return render_template('boats_delete.html', error=error, success=None)
 
 
+@app.route('/boat-update/<int:boat_id>', methods=['GET'])
+def boat_update_get_request(boat_id):
+    boat = conn.execute(text("SELECT * FROM boats WHERE id = :id"), {'id': boat_id}).fetchone()
+    if boat:
+        return render_template('boat-update.html', boat=boat)
+    else:
+        return render_template('error.html', message='Boat not found'), 404
+
+@app.route('/boat-update/<int:boat_id>', methods=['POST'])
+def boat_update_post_request(boat_id):
+    try:
+        conn.execute(
+            text("UPDATE boats SET name = :name, type = :type, owner_id = :owner_id, rental_price = :rental_price WHERE id = :id"),
+            {
+                'id': boat_id,
+                'name': request.form['name'],
+                'type': request.form['type'],
+                'owner_id': request.form['owner_id'],
+                'rental_price': request.form['rental_price']
+            }
+        )
+        return render_template('boat-update.html', success="Boat information updated successfully!", boat=request.form)
+    except Exception as e:
+        error = e.orig.args[1]
+        print(error)
+        return render_template('boat-update.html', error=error, boat=request.form)
+
+
+@app.route('/search', methods=['GET'])
+def search_boats():
+    query = request.args.get('query', '')
+    print("Received search query:", query)
+    try:
+        # Construct the SQL query to search in multiple columns
+        sql_query = text("""
+            SELECT * 
+            FROM boats 
+            WHERE name LIKE :query 
+            OR type LIKE :query 
+            OR owner_id LIKE :query 
+            OR rental_price LIKE :query
+        """)
+        print("SQL Query:", sql_query, "Query parameter:", f'%{query}%')
+
+        # Execute the SQL query with the search parameter
+        boats = conn.execute(sql_query, {'query': f'%{query}%'}).fetchall()
+        print("Boats found:", boats)
+
+        # Pass the search results and query string to the template
+        return render_template('boat_search.html', boats=boats, query=query)
+    except Exception as e:
+        error = str(e)
+        print(error)
+        # Handle errors here, if any
+        return render_template('error.html', message='An error occurred during search'), 500
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -14,7 +14,7 @@ header li {
 }
 
 .topBar{
-  background-color: #faf9f7;
+  background-color: #def8ff;
   display:flex;
   justify-content: space-between;
   align-items:center;
@@ -74,7 +74,7 @@ body {
   flex-flow: row wrap;
   padding: 30px 30px 20px 30px;
   color: #2f2f2f;
-  background-color: #fff;
+  background-color: #def8ff;
   border-top: 1px solid #e5e5e5;
 }
 

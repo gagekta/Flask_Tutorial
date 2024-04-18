@@ -36,8 +36,22 @@
     </header>
 
     {% block body %}
+    <h1>Search Results for "{{ query }}"</h1>
+    <div class="flex-box">
+        {% for boat in boats %}
+            <div class="boat">
+                <ul>
+                    <li>Boat ID: {{ boat['id'] }}</li>
+                    <li>Name: {{ boat['name'] }}</li>
+                    <li>Type: {{ boat['type'] }}</li>
+                    <li>Owner ID: {{ boat['owner_id'] }}</li>
+                    <li>Rental Price: {{ boat['rental_price'] }}</li>
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
     {% endblock %}
-    
+
     <footer class="footer">
       <div class="footer__addr">
         <h1 class="footer__logo">A very cool looking footer!</h1>

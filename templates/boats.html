@@ -10,6 +10,7 @@
     .boat {
         min-width: 200px;
         padding: 10px;
+
     }
 
     .pagination_bar {
@@ -17,12 +18,13 @@
         justify-content: flex-end;
         width: 1140px;
         margin: auto;
+        color: #7da9f0;
     }
     .pagination_button {
         font-size: 20px;
-        background-color: #4CAF50; /* Green */
+        background-color: #7da9f0;
         border: none;
-        color: white;
+        color: #f0d1b6;
         padding: 2px 2px 4px;
         text-align: center;
         text-decoration: none;
@@ -37,6 +39,18 @@
         height: 100%;
         padding-top: 20px;
         align-items: center;
+        background-color: #f0d1b6;
+    }
+
+    .boat-box {
+        background-color: #7da9f0;
+        padding-right: 20px;
+        border-radius: 5px;
+    }
+
+    .boat-link {
+        text-decoration: none;
+        color: black;
     }
 </style>
 
@@ -45,13 +59,17 @@
     {% set prev_page = page - 1 %}  <!-- variables in jinja --->
     <div class="column">
         <h3>Page {{ page }}</h3>
-
+        <form action="/search" method="GET">
+            <input type="text" name="query" placeholder="Search for boats...">
+            <button type="submit">Search</button>
+        </form>
         <div class="flex-box">
             {% for boat in boats %}
+            <a href="/boat-update/{{ boat['id'] }}" class="boat-link">
                 <div class="boat">
                     <ul>
                         <li>Boat id: {{ boat['id'] }}</li>
-                        <ul>
+                        <ul class="boat-box">
                             <li>Name: {{ boat['name'] }}</li>
                             <li>Type: {{ boat['type'] }}</li>
                             <li>Owner ID: {{ boat['owner_id'] }}</li>

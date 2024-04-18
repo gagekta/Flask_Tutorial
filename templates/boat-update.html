@@ -2,8 +2,52 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/header.css') }}">
     <title>My site</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/header.css') }}">
+    <style>
+
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      .container input[type="text"],
+      .container input[type="password"],
+      .container button[type="submit"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box; /* Ensure padding doesn't affect width */
+      }
+
+      .container button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .container button[type="submit"]:hover {
+        background-color: #45a049;
+      }
+    </style>
   </head>
 
   <body>
@@ -12,7 +56,6 @@
         <div class="">
           <img src="{{url_for('static',filename = 'images/boatlogo.png')}}" alt="Logo" class="logo">
           <ul class="barItem">
-
             <li><a href="/">HOME</a></li>
             <li><a href="/boats">BOATS</a></li>
             <li><a href="/create">CREATE BOATS</a></li>
@@ -31,13 +74,40 @@
             <a href="#">SIGNUP</a>
           </button>
         </div>
-
       </div>
     </header>
 
     {% block body %}
+    <div class="container">
+      <h2>Update Boat Information</h2>
+      {% if error %}
+          <div class="error">{{ error }}</div>
+      {% endif %}
+      {% if success %}
+          <div class="success">{{ success }}</div>
+      {% endif %}
+      <form action="/boat-update/{{ boat['id'] }}" method="POST">
+          <div class="form-group">
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" value="{{ boat['name'] }}" required>
+          </div>
+          <div class="form-group">
+              <label for="type">Type:</label>
+              <input type="text" id="type" name="type" value="{{ boat['type'] }}" required>
+          </div>
+          <div class="form-group">
+              <label for="owner_id">Owner ID:</label>
+              <input type="text" id="owner_id" name="owner_id" value="{{ boat['owner_id'] }}" required>
+          </div>
+          <div class="form-group">
+              <label for="rental_price">Rental Price:</label>
+              <input type="text" id="rental_price" name="rental_price" value="{{ boat['rental_price'] }}" required>
+          </div>
+          <button type="submit">Update</button>
+      </form>
+    </div>
     {% endblock %}
-    
+
     <footer class="footer">
       <div class="footer__addr">
         <h1 class="footer__logo">A very cool looking footer!</h1>
@@ -127,6 +197,5 @@
         </div>
       </div>
     </footer>
-
   </body>
 </html>
